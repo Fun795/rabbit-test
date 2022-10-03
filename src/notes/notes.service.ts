@@ -4,15 +4,18 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { NoteEntity } from './entities/note.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RabbitService } from '../rabbit/rabbit.service';
 
 @Injectable()
 export class NotesService {
   constructor(
     @InjectRepository(NoteEntity)
     private noteRepository: Repository<NoteEntity>,
+    private rabbitService: RabbitService,
   ) {}
   create(createNoteDto: CreateNoteDto) {
     const result = this.noteRepository.create(createNoteDto);
+    this.rabbitService.sendMessage(result);
     return this.noteRepository.save(result);
     // return 'This action adds a new note';
   }

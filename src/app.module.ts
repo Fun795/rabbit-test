@@ -23,8 +23,8 @@ import { NoteEntity } from './notes/entities/note.entity';
       synchronize: true,
     }),
   ],
-  controllers: [AppController, PostsController],
-  providers: [AppService],
+  // controllers: [AppController, PostsController],
+  // providers: [AppService],
 })
 export class AppModule {
   private dataSource: DataSource;
