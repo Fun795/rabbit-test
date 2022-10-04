@@ -11,13 +11,14 @@ export class NotesService {
   constructor(
     @InjectRepository(NoteEntity)
     private noteRepository: Repository<NoteEntity>,
-    private rabbitService: RabbitService,
+    private notificationService: RabbitService,
   ) {}
-  create(createNoteDto: CreateNoteDto) {
-    const result = this.noteRepository.create(createNoteDto);
-    // this.rabbitService.getHello();
-    this.rabbitService.publishEvent();
-    return this.noteRepository.save(result);
+
+  async create(createNoteDto: CreateNoteDto) {
+    const noteDto = this.noteRepository.create(createNoteDto);
+    const noteEntity = await this.noteRepository.save(noteDto);
+
+    this.notificationService.noteCreated(noteEntity);
   }
 
   findAll() {
