@@ -15,9 +15,9 @@ export class NotesService {
   ) {}
   create(createNoteDto: CreateNoteDto) {
     const result = this.noteRepository.create(createNoteDto);
-    this.rabbitService.sendMessage(result);
+    // this.rabbitService.getHello();
+    this.rabbitService.publishEvent();
     return this.noteRepository.save(result);
-    // return 'This action adds a new note';
   }
 
   findAll() {
